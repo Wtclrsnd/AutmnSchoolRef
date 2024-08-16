@@ -43,96 +43,37 @@ class AnimationsViewController: UIViewController {
         return slider
     }()
     
-    private let stackView = UIStackView()
-    private let timecodeLabel = UILabel()
-    private let animationNameLabel = UILabel()
-    private let animationInfoStack = UIStackView()
+    private lazy var stackView: UIStackView = {
+        let stack = UIStackView(arrangedSubviews: [animationView, controlsContainer])
+        stack.axis = .vertical
+        stack.translatesAutoresizingMaskIntoConstraints = false
+        return stack
+    }()
 
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        
-        view.backgroundColor = .systemBackground
-        setupStackView()
-        setupAnimationView()
-        setupControls()
-        loadAnimation(at: currentAnimationIndex, autoPlay: false)
-    }
+    private lazy var animationInfoStack: UIStackView = {
+        let stack = UIStackView(arrangedSubviews: [timecodeLabel, animationNameLabel])
+        stack.axis = .vertical
+        stack.spacing = 8
+        return stack
+    }()
 
-    private func setupStackView() {
-        stackView.axis = .vertical
-        stackView.translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(stackView)
-        
-        NSLayoutConstraint.activate([
-            stackView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            stackView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            stackView.topAnchor.constraint(equalTo: view.topAnchor),
-            stackView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
-        ])
-    }
-
-    private func setupAnimationView() {
-        stackView.addArrangedSubview(animationView)
-        
-        NSLayoutConstraint.activate([
-            animationView.heightAnchor.constraint(equalTo: stackView.heightAnchor, multiplier: 0.6)
-        ])
-    }
-
-    private func setupControls() {
-        setupAnimationInfo()
-        
-        let controlsButtonStack = UIStackView(arrangedSubviews: [previousButton, playPauseButton, nextButton])
-        controlsButtonStack.axis = .horizontal
-        controlsButtonStack.spacing = 5
-        controlsButtonStack.distribution = .equalSpacing
-        
-        let controlsContainerStack = UIStackView(arrangedSubviews: [controlsButtonStack])
-        controlsContainerStack.axis = .vertical
-        controlsContainerStack.spacing = 10
-        controlsContainerStack.alignment = .center
-        
-        let speedControlStack = setupSpeedControl()
-        
-        let verticalStack = UIStackView(arrangedSubviews: [animationInfoStack, controlsContainerStack, speedControlStack])
-        verticalStack.axis = .vertical
-        verticalStack.spacing = 65
-        verticalStack.translatesAutoresizingMaskIntoConstraints = false
-        
-        let controlsContainer = UIView()
-        controlsContainer.translatesAutoresizingMaskIntoConstraints = false
-        controlsContainer.addSubview(verticalStack)
-        stackView.addArrangedSubview(controlsContainer)
-        
-        NSLayoutConstraint.activate([
-            verticalStack.centerXAnchor.constraint(equalTo: controlsContainer.centerXAnchor),
-            verticalStack.topAnchor.constraint(equalTo: controlsContainer.topAnchor),
-            controlsContainer.heightAnchor.constraint(equalTo: stackView.heightAnchor, multiplier: 0.4),
-            controlsButtonStack.widthAnchor.constraint(equalTo: controlsContainer.widthAnchor, multiplier: 0.5)
-        ])
-    }
-
-    private func setupAnimationInfo() {
-        animationInfoStack.axis = .vertical
-        animationInfoStack.spacing = 8
-        
-        timecodeLabel.font = UIFont.systemFont(ofSize: 48, weight: .bold)
-        timecodeLabel.textColor = .black
-        timecodeLabel.textAlignment = .center
-        
-        animationNameLabel.font = UIFont.systemFont(ofSize: 20, weight: .semibold)
-        animationNameLabel.textColor = .gray
-        animationNameLabel.textAlignment = .center
-        
-        animationInfoStack.addArrangedSubview(timecodeLabel)
-        animationInfoStack.addArrangedSubview(animationNameLabel)
-    }
-
-    private func setupSpeedControl() -> UIStackView {
-        let speedStack = UIStackView()
-        speedStack.axis = .horizontal
-        speedStack.spacing = 8
-        
+    private lazy var controlsButtonStack: UIStackView = {
+        let stack = UIStackView(arrangedSubviews: [previousButton, playPauseButton, nextButton])
+        stack.axis = .horizontal
+        stack.spacing = 5
+        stack.distribution = .equalSpacing
+        return stack
+    }()
+    
+    private lazy var controlsContainerStack: UIStackView = {
+        let stack = UIStackView(arrangedSubviews: [controlsButtonStack])
+        stack.axis = .vertical
+        stack.spacing = 10
+        stack.alignment = .center
+        return stack
+    }()
+    
+    private lazy var speedControlStack: UIStackView = {
         let slowIcon = UIImageView(image: UIImage(systemName: "tortoise.fill"))
         slowIcon.tintColor = .gray
         slowIcon.contentMode = .scaleAspectFit
@@ -140,16 +81,73 @@ class AnimationsViewController: UIViewController {
         let fastIcon = UIImageView(image: UIImage(systemName: "hare.fill"))
         fastIcon.tintColor = .gray
         fastIcon.contentMode = .scaleAspectFit
+        
+        let stack = UIStackView(arrangedSubviews: [slowIcon, speedSlider, fastIcon])
+        stack.axis = .horizontal
+        stack.spacing = 8
+        
+        return stack
+    }()
+    
+    private lazy var verticalStack: UIStackView = {
+        let stack = UIStackView(arrangedSubviews: [animationInfoStack, controlsContainerStack, speedControlStack])
+        stack.axis = .vertical
+        stack.spacing = 65
+        stack.translatesAutoresizingMaskIntoConstraints = false
+        return stack
+    }()
 
-        speedStack.addArrangedSubview(slowIcon)
-        speedStack.addArrangedSubview(speedSlider)
-        speedStack.addArrangedSubview(fastIcon)
+    private lazy var controlsContainer: UIView = {
+        let view = UIView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(verticalStack)
         
         NSLayoutConstraint.activate([
-            speedSlider.widthAnchor.constraint(equalTo: speedStack.widthAnchor, multiplier: 0.8)
+            verticalStack.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            verticalStack.topAnchor.constraint(equalTo: view.topAnchor),
+            controlsButtonStack.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 0.5),
+            speedSlider.widthAnchor.constraint(equalTo: speedControlStack.widthAnchor, multiplier: 0.8)
         ])
         
-        return speedStack
+        return view
+    }()
+
+    private let timecodeLabel: UILabel = {
+        let label = UILabel()
+        label.font = UIFont.systemFont(ofSize: 48, weight: .bold)
+        label.textColor = .black
+        label.textAlignment = .center
+        return label
+    }()
+    
+    private let animationNameLabel: UILabel = {
+        let label = UILabel()
+        label.font = UIFont.systemFont(ofSize: 20, weight: .semibold)
+        label.textColor = .gray
+        label.textAlignment = .center
+        return label
+    }()
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        view.backgroundColor = .systemBackground
+        setupViews()
+        loadAnimation(at: currentAnimationIndex, autoPlay: false)
+    }
+    
+    private func setupViews() {
+        view.addSubview(stackView)
+        
+        NSLayoutConstraint.activate([
+            stackView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            stackView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            stackView.topAnchor.constraint(equalTo: view.topAnchor),
+            stackView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            
+            animationView.heightAnchor.constraint(equalTo: stackView.heightAnchor, multiplier: 0.6),
+            controlsContainer.heightAnchor.constraint(equalTo: stackView.heightAnchor, multiplier: 0.4)
+        ])
     }
 
     private func createConfiguredButton(systemName: String, pointSize: CGFloat) -> UIButton {
