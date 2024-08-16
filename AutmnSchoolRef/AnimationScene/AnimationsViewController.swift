@@ -2,37 +2,45 @@ import UIKit
 import Lottie
 
 class AnimationsViewController: UIViewController {
-    
+
     private let animationNames = ["animation1", "animation2", "animation3"]
     private var currentAnimationIndex = 0
-    
     private var animationTimer: Timer?
-    
+
     private let animationView = LottieAnimationView()
-    private let playPauseButton: UIButton
-    private let previousButton: UIButton
-    private let nextButton: UIButton
-    private let speedSlider = UISlider()
+
+    private lazy var playPauseButton: UIButton = {
+        let button = self.createConfiguredButton(systemName: "play.fill", pointSize: 40)
+        button.addTarget(self, action: #selector(togglePlayPause), for: .touchUpInside)
+        return button
+    }()
+    
+    private lazy var previousButton: UIButton = {
+        let button = self.createConfiguredButton(systemName: "backward.fill", pointSize: 30)
+        button.addTarget(self, action: #selector(showPreviousAnimation), for: .touchUpInside)
+        return button
+    }()
+    
+    private lazy var nextButton: UIButton = {
+        let button = self.createConfiguredButton(systemName: "forward.fill", pointSize: 30)
+        button.addTarget(self, action: #selector(showNextAnimation), for: .touchUpInside)
+        return button
+    }()
+    
+    private let speedSlider: UISlider = {
+        let slider = UISlider()
+        slider.minimumValue = 0.5
+        slider.maximumValue = 2.0
+        slider.value = 1.0
+        slider.addTarget(self, action: #selector(speedSliderChanged), for: .valueChanged)
+        return slider
+    }()
     
     private let stackView = UIStackView()
     private let timecodeLabel = UILabel()
     private let animationNameLabel = UILabel()
     private let animationInfoStack = UIStackView()
-    
-    init() {
-        playPauseButton = AnimationsViewController.createConfiguredButton(systemName: "play.fill", pointSize: 40, action: #selector(togglePlayPause))
-        previousButton = AnimationsViewController.createConfiguredButton(systemName: "backward.fill", pointSize: 30, action: #selector(showPreviousAnimation))
-        nextButton = AnimationsViewController.createConfiguredButton(systemName: "forward.fill", pointSize: 30, action: #selector(showNextAnimation))
-        super.init(nibName: nil, bundle: nil)
-    }
-    
-    required init?(coder: NSCoder) {
-        playPauseButton = AnimationsViewController.createConfiguredButton(systemName: "play.fill", pointSize: 40, action: #selector(togglePlayPause))
-        previousButton = AnimationsViewController.createConfiguredButton(systemName: "backward.fill", pointSize: 30, action: #selector(showPreviousAnimation))
-        nextButton = AnimationsViewController.createConfiguredButton(systemName: "forward.fill", pointSize: 30, action: #selector(showNextAnimation))
-        super.init(coder: coder)
-    }
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -42,7 +50,7 @@ class AnimationsViewController: UIViewController {
         setupControls()
         loadAnimation(at: currentAnimationIndex, autoPlay: false)
     }
-    
+
     private func setupStackView() {
         stackView.axis = .vertical
         stackView.translatesAutoresizingMaskIntoConstraints = false
@@ -55,7 +63,7 @@ class AnimationsViewController: UIViewController {
             stackView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
     }
-    
+
     private func setupAnimationContainer() {
         let animationContainer = UIView()
         animationContainer.backgroundColor = .lightGray
@@ -76,7 +84,7 @@ class AnimationsViewController: UIViewController {
             animationView.widthAnchor.constraint(lessThanOrEqualTo: animationContainer.widthAnchor, multiplier: 0.9)
         ])
     }
-    
+
     private func setupControls() {
         setupAnimationInfo()
         
@@ -109,7 +117,7 @@ class AnimationsViewController: UIViewController {
             controlsButtonStack.widthAnchor.constraint(equalTo: controlsContainer.widthAnchor, multiplier: 0.5)
         ])
     }
-    
+
     private func setupAnimationInfo() {
         animationInfoStack.axis = .vertical
         animationInfoStack.spacing = 8
@@ -125,7 +133,7 @@ class AnimationsViewController: UIViewController {
         animationInfoStack.addArrangedSubview(timecodeLabel)
         animationInfoStack.addArrangedSubview(animationNameLabel)
     }
-    
+
     private func setupSpeedControl() -> UIStackView {
         let speedStack = UIStackView()
         speedStack.axis = .horizontal
@@ -135,15 +143,10 @@ class AnimationsViewController: UIViewController {
         slowIcon.tintColor = .gray
         slowIcon.contentMode = .scaleAspectFit
         
-        speedSlider.minimumValue = 0.5
-        speedSlider.maximumValue = 2.0
-        speedSlider.value = 1.0
-        speedSlider.addTarget(self, action: #selector(speedSliderChanged), for: .valueChanged)
-        
         let fastIcon = UIImageView(image: UIImage(systemName: "hare.fill"))
         fastIcon.tintColor = .gray
         fastIcon.contentMode = .scaleAspectFit
-        
+
         speedStack.addArrangedSubview(slowIcon)
         speedStack.addArrangedSubview(speedSlider)
         speedStack.addArrangedSubview(fastIcon)
@@ -154,20 +157,18 @@ class AnimationsViewController: UIViewController {
         
         return speedStack
     }
-    
-    private static func createConfiguredButton(systemName: String, pointSize: CGFloat, action: Selector) -> UIButton {
+
+    private func createConfiguredButton(systemName: String, pointSize: CGFloat) -> UIButton {
         var config = UIButton.Configuration.plain()
         config.image = UIImage(systemName: systemName)
         config.preferredSymbolConfigurationForImage = UIImage.SymbolConfiguration(pointSize: pointSize, weight: .bold)
         config.contentInsets = NSDirectionalEdgeInsets(top: 4, leading: 4, bottom: 4, trailing: 4)
         
         let button = UIButton(configuration: config)
-        button.addTarget(nil, action: action, for: .touchUpInside)
         button.tintColor = .gray
-        
         return button
     }
-    
+
     private func loadAnimation(at index: Int, autoPlay: Bool) {
         let animationName = animationNames[index]
         animationView.animation = LottieAnimation.named(animationName)
@@ -185,7 +186,7 @@ class AnimationsViewController: UIViewController {
             playPauseButton.configuration?.image = UIImage(systemName: "play.fill")
         }
     }
-    
+
     private func startTimer() {
         animationTimer = Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true) { [weak self] _ in
             guard let self = self, let animation = self.animationView.animation else { return }
@@ -194,13 +195,13 @@ class AnimationsViewController: UIViewController {
             self.timecodeLabel.text = self.formatTime(currentTime)
         }
     }
-    
+
     private func formatTime(_ time: Double) -> String {
         let minutes = Int(time) / 60
         let seconds = Int(time) % 60
         return String(format: "%d:%02d", minutes, seconds)
     }
-    
+
     @objc private func togglePlayPause() {
         if animationView.isAnimationPlaying {
             animationView.pause()
@@ -212,17 +213,17 @@ class AnimationsViewController: UIViewController {
             playPauseButton.configuration?.image = UIImage(systemName: "pause.fill")
         }
     }
-    
+
     @objc private func showPreviousAnimation() {
         currentAnimationIndex = (currentAnimationIndex - 1 + animationNames.count) % animationNames.count
         loadAnimation(at: currentAnimationIndex, autoPlay: animationView.isAnimationPlaying)
     }
-    
+
     @objc private func showNextAnimation() {
         currentAnimationIndex = (currentAnimationIndex + 1) % animationNames.count
         loadAnimation(at: currentAnimationIndex, autoPlay: animationView.isAnimationPlaying)
     }
-    
+
     @objc private func speedSliderChanged() {
         animationView.animationSpeed = CGFloat(speedSlider.value)
     }
