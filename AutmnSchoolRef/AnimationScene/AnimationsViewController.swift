@@ -7,7 +7,14 @@ class AnimationsViewController: UIViewController {
     private var currentAnimationIndex = 0
     private var animationTimer: Timer?
 
-    private let animationView = LottieAnimationView()
+    private let animationView: LottieAnimationView = {
+        let view = LottieAnimationView()
+        view.contentMode = .scaleAspectFit
+        view.loopMode = .loop
+        view.backgroundColor = .lightGray
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
 
     private lazy var playPauseButton: UIButton = {
         let button = self.createConfiguredButton(systemName: "play.fill", pointSize: 40)
@@ -46,7 +53,7 @@ class AnimationsViewController: UIViewController {
         
         view.backgroundColor = .systemBackground
         setupStackView()
-        setupAnimationContainer()
+        setupAnimationView()
         setupControls()
         loadAnimation(at: currentAnimationIndex, autoPlay: false)
     }
@@ -64,24 +71,11 @@ class AnimationsViewController: UIViewController {
         ])
     }
 
-    private func setupAnimationContainer() {
-        let animationContainer = UIView()
-        animationContainer.backgroundColor = .lightGray
-        animationContainer.translatesAutoresizingMaskIntoConstraints = false
-        
-        animationView.contentMode = .scaleAspectFit
-        animationView.loopMode = .loop
-        animationView.translatesAutoresizingMaskIntoConstraints = false
-        
-        animationContainer.addSubview(animationView)
-        stackView.addArrangedSubview(animationContainer)
+    private func setupAnimationView() {
+        stackView.addArrangedSubview(animationView)
         
         NSLayoutConstraint.activate([
-            animationContainer.heightAnchor.constraint(equalTo: stackView.heightAnchor, multiplier: 0.6),
-            animationView.centerXAnchor.constraint(equalTo: animationContainer.centerXAnchor),
-            animationView.centerYAnchor.constraint(equalTo: animationContainer.centerYAnchor),
-            animationView.heightAnchor.constraint(lessThanOrEqualTo: animationContainer.heightAnchor, multiplier: 0.9),
-            animationView.widthAnchor.constraint(lessThanOrEqualTo: animationContainer.widthAnchor, multiplier: 0.9)
+            animationView.heightAnchor.constraint(equalTo: stackView.heightAnchor, multiplier: 0.6)
         ])
     }
 
