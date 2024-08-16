@@ -24,6 +24,13 @@ class AnimationsViewController: UIViewController {
         
         let button = UIButton(configuration: config)
         button.tintColor = .gray
+        button.translatesAutoresizingMaskIntoConstraints = false
+        
+        NSLayoutConstraint.activate([
+            button.widthAnchor.constraint(equalToConstant: 60),
+            button.heightAnchor.constraint(equalToConstant: 60)
+        ])
+        
         return button
     }
 
