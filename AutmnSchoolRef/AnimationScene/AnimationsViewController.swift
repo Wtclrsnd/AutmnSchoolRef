@@ -16,20 +16,31 @@ class AnimationsViewController: UIViewController {
         return view
     }()
 
+    private lazy var createConfiguredButton: (String, CGFloat) -> UIButton = { systemName, pointSize in
+        var config = UIButton.Configuration.plain()
+        config.image = UIImage(systemName: systemName)
+        config.preferredSymbolConfigurationForImage = UIImage.SymbolConfiguration(pointSize: pointSize, weight: .bold)
+        config.contentInsets = NSDirectionalEdgeInsets(top: 4, leading: 4, bottom: 4, trailing: 4)
+        
+        let button = UIButton(configuration: config)
+        button.tintColor = .gray
+        return button
+    }
+
     private lazy var playPauseButton: UIButton = {
-        let button = self.createConfiguredButton(systemName: "play.fill", pointSize: 40)
+        let button = createConfiguredButton("play.fill", 40)
         button.addTarget(self, action: #selector(togglePlayPause), for: .touchUpInside)
         return button
     }()
     
     private lazy var previousButton: UIButton = {
-        let button = self.createConfiguredButton(systemName: "backward.fill", pointSize: 30)
+        let button = createConfiguredButton("backward.fill", 30)
         button.addTarget(self, action: #selector(showPreviousAnimation), for: .touchUpInside)
         return button
     }()
     
     private lazy var nextButton: UIButton = {
-        let button = self.createConfiguredButton(systemName: "forward.fill", pointSize: 30)
+        let button = createConfiguredButton("forward.fill", 30)
         button.addTarget(self, action: #selector(showNextAnimation), for: .touchUpInside)
         return button
     }()
@@ -148,17 +159,6 @@ class AnimationsViewController: UIViewController {
             animationView.heightAnchor.constraint(equalTo: stackView.heightAnchor, multiplier: 0.6),
             controlsContainer.heightAnchor.constraint(equalTo: stackView.heightAnchor, multiplier: 0.4)
         ])
-    }
-
-    private func createConfiguredButton(systemName: String, pointSize: CGFloat) -> UIButton {
-        var config = UIButton.Configuration.plain()
-        config.image = UIImage(systemName: systemName)
-        config.preferredSymbolConfigurationForImage = UIImage.SymbolConfiguration(pointSize: pointSize, weight: .bold)
-        config.contentInsets = NSDirectionalEdgeInsets(top: 4, leading: 4, bottom: 4, trailing: 4)
-        
-        let button = UIButton(configuration: config)
-        button.tintColor = .gray
-        return button
     }
 
     private func loadAnimation(at index: Int, autoPlay: Bool) {
