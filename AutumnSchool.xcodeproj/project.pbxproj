@@ -10,9 +10,9 @@
 		1F0C586F2C73274100EEF249 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F0C586E2C73274100EEF249 /* AppDelegate.swift */; };
 		1F0C58712C73274100EEF249 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F0C58702C73274100EEF249 /* SceneDelegate.swift */; };
 		1F0C58732C73274100EEF249 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F0C58722C73274100EEF249 /* ViewController.swift */; };
-		1F0C58762C73274100EEF249 /* Base in Resources */ = {isa = PBXBuildFile; fileRef = 1F0C58752C73274100EEF249 /* Base */; };
 		1F0C58782C73274400EEF249 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1F0C58772C73274400EEF249 /* Assets.xcassets */; };
 		1F0C587B2C73274400EEF249 /* Base in Resources */ = {isa = PBXBuildFile; fileRef = 1F0C587A2C73274400EEF249 /* Base */; };
+		1F0C58832C732BC500EEF249 /* ValidatableTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F0C58822C732BC500EEF249 /* ValidatableTextField.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -20,10 +20,10 @@
 		1F0C586E2C73274100EEF249 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		1F0C58702C73274100EEF249 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		1F0C58722C73274100EEF249 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
-		1F0C58752C73274100EEF249 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		1F0C58772C73274400EEF249 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		1F0C587A2C73274400EEF249 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		1F0C587C2C73274400EEF249 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		1F0C58822C732BC500EEF249 /* ValidatableTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ValidatableTextField.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -59,10 +59,10 @@
 				1F0C586E2C73274100EEF249 /* AppDelegate.swift */,
 				1F0C58702C73274100EEF249 /* SceneDelegate.swift */,
 				1F0C58722C73274100EEF249 /* ViewController.swift */,
-				1F0C58742C73274100EEF249 /* Main.storyboard */,
 				1F0C58772C73274400EEF249 /* Assets.xcassets */,
 				1F0C58792C73274400EEF249 /* LaunchScreen.storyboard */,
 				1F0C587C2C73274400EEF249 /* Info.plist */,
+				1F0C58822C732BC500EEF249 /* ValidatableTextField.swift */,
 			);
 			path = AutumnSchool;
 			sourceTree = "<group>";
@@ -127,7 +127,6 @@
 			files = (
 				1F0C58782C73274400EEF249 /* Assets.xcassets in Resources */,
 				1F0C587B2C73274400EEF249 /* Base in Resources */,
-				1F0C58762C73274100EEF249 /* Base in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -141,20 +140,13 @@
 				1F0C58732C73274100EEF249 /* ViewController.swift in Sources */,
 				1F0C586F2C73274100EEF249 /* AppDelegate.swift in Sources */,
 				1F0C58712C73274100EEF249 /* SceneDelegate.swift in Sources */,
+				1F0C58832C732BC500EEF249 /* ValidatableTextField.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXVariantGroup section */
-		1F0C58742C73274100EEF249 /* Main.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				1F0C58752C73274100EEF249 /* Base */,
-			);
-			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
 		1F0C58792C73274400EEF249 /* LaunchScreen.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -296,7 +288,6 @@
 				INFOPLIST_FILE = AutumnSchool/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
-				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -323,7 +314,6 @@
 				INFOPLIST_FILE = AutumnSchool/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
-				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				LD_RUNPATH_SEARCH_PATHS = (
