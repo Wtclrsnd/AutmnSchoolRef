@@ -31,7 +31,7 @@ class StyleruTabBarController: UITabBarController {
                 title: "Animations",
                 image: UIImage(systemName: "play.circle.fill") ?? UIImage()),
             createViewController(
-                for: ListCollectionViewController(),
+                for: UINavigationController(rootViewController: ListCollectionViewController()),
                 title: "List",
                 image: UIImage(systemName: "table.fill") ?? UIImage())
         ]

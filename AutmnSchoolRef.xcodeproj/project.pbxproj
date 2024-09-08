@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		336E7DF72C6F81F800165046 /* animation1.json in Resources */ = {isa = PBXBuildFile; fileRef = 336E7DF62C6F81F700165046 /* animation1.json */; };
 		3398CCFA2C6A398A00E4A36B /* animation2.json in Resources */ = {isa = PBXBuildFile; fileRef = 3398CCF92C6A398A00E4A36B /* animation2.json */; };
 		3398CCFC2C6A3A0300E4A36B /* animation3.json in Resources */ = {isa = PBXBuildFile; fileRef = 3398CCFB2C6A3A0200E4A36B /* animation3.json */; };
 		33FE98202C6A487800946744 /* Lottie in Frameworks */ = {isa = PBXBuildFile; productRef = 33FE981F2C6A487800946744 /* Lottie */; };
@@ -16,6 +15,7 @@
 		723F4C7F2C4BD4BF00F400FC /* EnterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 723F4C7E2C4BD4BF00F400FC /* EnterViewController.swift */; };
 		723F4C842C4BD4C100F400FC /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 723F4C832C4BD4C100F400FC /* Assets.xcassets */; };
 		723F4C872C4BD4C100F400FC /* Base in Resources */ = {isa = PBXBuildFile; fileRef = 723F4C862C4BD4C100F400FC /* Base */; };
+		72690E522C8DABF10082E9D0 /* IconsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72690E512C8DABF00082E9D0 /* IconsService.swift */; };
 		7299612E2C6914BF00917EA9 /* StyleruTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7299612D2C6914BF00917EA9 /* StyleruTabBarController.swift */; };
 		729961302C6914E200917EA9 /* AnimationsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7299612F2C6914E200917EA9 /* AnimationsViewController.swift */; };
 		729961322C6914FC00917EA9 /* ListCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 729961312C6914FC00917EA9 /* ListCollectionViewController.swift */; };
@@ -32,6 +32,7 @@
 		723F4C832C4BD4C100F400FC /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		723F4C862C4BD4C100F400FC /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		723F4C882C4BD4C100F400FC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		72690E512C8DABF00082E9D0 /* IconsService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IconsService.swift; sourceTree = "<group>"; };
 		7299612D2C6914BF00917EA9 /* StyleruTabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StyleruTabBarController.swift; sourceTree = "<group>"; };
 		7299612F2C6914E200917EA9 /* AnimationsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimationsViewController.swift; sourceTree = "<group>"; };
 		729961312C6914FC00917EA9 /* ListCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListCollectionViewController.swift; sourceTree = "<group>"; };
@@ -94,7 +95,9 @@
 		723F4C8E2C4BDA5000F400FC /* CollectionViewScenes */ = {
 			isa = PBXGroup;
 			children = (
+				72690E532C8DAE9E0082E9D0 /* CollectionView */,
 				729961312C6914FC00917EA9 /* ListCollectionViewController.swift */,
+				72690E512C8DABF00082E9D0 /* IconsService.swift */,
 			);
 			path = CollectionViewScenes;
 			sourceTree = "<group>";
@@ -114,6 +117,13 @@
 				7299612F2C6914E200917EA9 /* AnimationsViewController.swift */,
 			);
 			path = AnimationScene;
+			sourceTree = "<group>";
+		};
+		72690E532C8DAE9E0082E9D0 /* CollectionView */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = CollectionView;
 			sourceTree = "<group>";
 		};
 		7299612C2C69147800917EA9 /* TabBar */ = {
@@ -189,7 +199,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				723F4C842C4BD4C100F400FC /* Assets.xcassets in Resources */,
-				336E7DF72C6F81F800165046 /* animation1.json in Resources */,
 				3398CCFA2C6A398A00E4A36B /* animation2.json in Resources */,
 				723F4C872C4BD4C100F400FC /* Base in Resources */,
 				3398CCFC2C6A3A0300E4A36B /* animation3.json in Resources */,
@@ -204,6 +213,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				7299612E2C6914BF00917EA9 /* StyleruTabBarController.swift in Sources */,
+				72690E522C8DABF10082E9D0 /* IconsService.swift in Sources */,
 				723F4C7F2C4BD4BF00F400FC /* EnterViewController.swift in Sources */,
 				723F4C7B2C4BD4BF00F400FC /* AppDelegate.swift in Sources */,
 				723F4C7D2C4BD4BF00F400FC /* SceneDelegate.swift in Sources */,
