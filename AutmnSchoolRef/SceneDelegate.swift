@@ -15,14 +15,11 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         if let windowScene = scene as? UIWindowScene {
             let window = UIWindow(windowScene: windowScene)
-            window.rootViewController = StyleruTabBarController()
+            let tabBar = StyleruTabBarController()
+            window.rootViewController = tabBar
             self.window = window
 
             window.makeKeyAndVisible()
-            
-            let enterViewController = EnterViewController()
-            enterViewController.modalPresentationStyle = .fullScreen
-            window.rootViewController?.present(enterViewController, animated: true)
         }
         guard let _ = (scene as? UIWindowScene) else { return }
     }

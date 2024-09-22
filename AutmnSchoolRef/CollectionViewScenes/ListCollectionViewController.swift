@@ -39,8 +39,6 @@ private extension ListCollectionViewController {
     
     func setupUI() {
         view.backgroundColor = .systemGroupedBackground
-        title = "List"
-        navigationController?.navigationBar.prefersLargeTitles = true
         setupCollectionView()
     }
     

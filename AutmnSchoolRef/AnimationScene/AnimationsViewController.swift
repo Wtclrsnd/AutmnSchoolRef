@@ -132,7 +132,7 @@ class AnimationsViewController: UIViewController {
 
     private let timecodeLabel: UILabel = {
         let label = UILabel()
-        label.font = UIFont.systemFont(ofSize: 48, weight: .bold)
+        label.font = .styleruBold
         label.textColor = .black
         label.textAlignment = .center
         return label
@@ -140,7 +140,7 @@ class AnimationsViewController: UIViewController {
     
     private let animationNameLabel: UILabel = {
         let label = UILabel()
-        label.font = UIFont.systemFont(ofSize: 20, weight: .semibold)
+        label.font = .styleruSemibold
         label.textColor = .gray
         label.textAlignment = .center
         return label
