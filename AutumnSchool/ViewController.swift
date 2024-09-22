@@ -18,6 +18,15 @@ class ViewController: UIViewController {
         textField.placeholder = "Логин"
         textField.borderStyle = .roundedRect
         textField.autocapitalizationType = .none
+        
+        
+        textField.backgroundColor = UIColor(red: 0.96, green: 0.96, blue: 0.96, alpha: 1.00)
+        textField.layer.borderColor = CGColor(red: 134, green: 137, blue: 139, alpha: 1)
+        
+        textField.layer.cornerRadius = 15
+       
+        textField.font = .systemFont(ofSize: 17, weight: .regular)
+        
         return textField
     }()
 
@@ -26,26 +35,30 @@ class ViewController: UIViewController {
         textField.placeholder = "Пароль"
         textField.borderStyle = .roundedRect
         textField.isSecureTextEntry = true
+        
+        textField.backgroundColor = UIColor(red: 0.96, green: 0.96, blue: 0.96, alpha: 1.00)
+        textField.layer.cornerRadius = 15
+        
         return textField
     }()
 
     let loginButton: UIButton = {
         let button = UIButton()
         button.setTitle("Зарегистрироваться", for: .normal)
-        button.backgroundColor = .systemBlue
+        button.backgroundColor = .systemGray
         button.setTitleColor(.white, for: .normal)
         button.layer.cornerRadius = 10
-        button.addTarget(self, action: #selector(handleLoginButtonTap), for: .touchUpInside)
-        button.contentEdgeInsets = UIEdgeInsets(top: 10, left: 15, bottom: 10, right: 15)
+        button.addTarget(ViewController.self, action: #selector(handleLoginButtonTap), for: .touchUpInside)
         
         return button
     }()
 
-    // MARK: - Lifecycle Methods
+    // MARK: - 
 
     override func viewDidLoad() {
         super.viewDidLoad()
         setupLayout()
+        addObservers()
     }
 
     // MARK: - UI Setup
@@ -56,7 +69,8 @@ class ViewController: UIViewController {
         view.addSubview(titleLabel)
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         titleLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        titleLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20).isActive = true
+        titleLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 70).isActive = true
+        titleLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20).isActive = true
 
         view.addSubview(loginTextField)
         loginTextField.translatesAutoresizingMaskIntoConstraints = false
@@ -74,7 +88,13 @@ class ViewController: UIViewController {
         loginButton.translatesAutoresizingMaskIntoConstraints = false
         loginButton.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
         loginButton.topAnchor.constraint(equalTo: passwordTextField.bottomAnchor, constant: 40).isActive = true
-        //loginButton.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 2/5).isActive = true
+        loginButton.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 3/5).isActive = true
+    }
+
+    // MARK: - Observers
+
+    func addObservers() {
+        passwordTextField.addTarget(self, action: #selector(handlePasswordChange), for: .editingChanged)
     }
 
     // MARK: - Actions
@@ -95,8 +115,6 @@ class ViewController: UIViewController {
             return
         }
 
-        // Here you can implement your actual login logic
-        // For now, let's just present a new view controller
         let nextViewController = NextViewController()
         nextViewController.modalPresentationStyle = .fullScreen
         present(nextViewController, animated: true, completion: nil)
