@@ -29,7 +29,7 @@ class EnterViewController: UIViewController {
         textField.backgroundColor = .styleruLightGray
         textField.layer.borderColor = UIColor.styleruBorderGray.cgColor
         
-        textField.layer.cornerRadius = 15
+        textField.layer.cornerRadius = 15 // выносим в структ Constants
         
         textField.font = .styleruRegular
         
@@ -43,7 +43,7 @@ class EnterViewController: UIViewController {
         textField.isSecureTextEntry = true
         
         textField.backgroundColor = .styleruLightGray
-        textField.layer.cornerRadius = 15
+        textField.layer.cornerRadius = 15 // выносим в структ Constants
         
         return textField
     }()
@@ -53,7 +53,7 @@ class EnterViewController: UIViewController {
         button.setTitle("Зарегистрироваться", for: .normal)
         button.backgroundColor = .systemGray
         button.setTitleColor(.white, for: .normal)
-        button.layer.cornerRadius = 10
+        button.layer.cornerRadius = 10 // выносим в структ Constants
         button.addTarget(self, action: #selector(handleLoginButtonTap), for: .touchUpInside)
         
         return button
@@ -71,6 +71,10 @@ class EnterViewController: UIViewController {
     
     func setupLayout() {
         view.backgroundColor = .white
+        
+        // РАЗБИТЬ все по функам
+        // Отступы в Constants
+        // Переверстать все на UIStackView
         
         view.addSubview(titleLabel)
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -105,6 +109,8 @@ class EnterViewController: UIViewController {
     
     // MARK: - Actions
     @objc func handleLoginButtonTap() {
+        
+        // Проверки в отдельный функ с аргументом
         guard let login = loginTextField.text, let password = passwordTextField.text else {
             print("Please fill in both login and password fields")
             return
@@ -120,18 +126,24 @@ class EnterViewController: UIViewController {
             return
         }
         
+        // проверка с REGEX в отдельном функе
+        
         dismiss(animated: true)
     }
     
     @objc func handlePasswordChange() {
         guard let password = passwordTextField.text else { return }
         
-        if password.count < 8 {
+        if password.count < 8 { // вынос парамсов в Constants и заверни ка кейсы покрасивше в функ
             passwordTextField.layer.borderWidth = 1
             passwordTextField.layer.borderColor = UIColor.red.cgColor
         } else {
             passwordTextField.layer.borderWidth = 0
             passwordTextField.layer.borderColor = nil
         }
+    }
+    
+    struct Constants {
+        static let cornerRadius: CGFloat = 15 // пример переменной
     }
 }
