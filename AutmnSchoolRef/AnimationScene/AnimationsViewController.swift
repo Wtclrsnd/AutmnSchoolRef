@@ -191,17 +191,18 @@ final class AnimationsViewController: UIViewController {
         animationView.animation = LottieAnimation.named(animationName)
         animationNameLabel.text = animationName
         timecodeLabel.text = Constants.timecodeInitial
-        
+
         animationTimer?.invalidate()
         
         if autoPlay {
             startTimer()
             animationView.play()
-            playPauseButton.configuration?.image = UIImage(named: "pause")
         } else {
             animationView.stop()
-            playPauseButton.configuration?.image = UIImage(named: "play")
         }
+
+        let imageName = autoPlay ? "pause" : "play"
+        playPauseButton.configuration?.image = UIImage(named: imageName)
     }
 
     private func startTimer() {
