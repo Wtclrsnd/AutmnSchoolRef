@@ -3,9 +3,27 @@ import Lottie
 
 final class AnimationsViewController: UIViewController {
 
-    private let animationNames = ["animation1", "animation2", "animation3"] // в Constants
+    private struct Constants {
+        static let animationNames = ["animation1", "animation2", "animation3"]
+        static let initialAnimationIndex = 0
+        static let buttonDimension: CGFloat = 60
+        static let buttonInsets = NSDirectionalEdgeInsets(top: 4, leading: 4, bottom: 4, trailing: 4)
+        static let playPausePointSize: CGFloat = 40
+        static let controlButtonPointSize: CGFloat = 30
+        static let sliderMinValue: Float = 0.5
+        static let sliderMaxValue: Float = 2.0
+        static let sliderInitialValue: Float = 1.0
+        static let horizontalStackSpacing: CGFloat = 8
+        static let verticalStackSpacing: CGFloat = 65
+        static let controlButtonStackSpacing: CGFloat = 5
+        static let controlsContainerStackSpacing: CGFloat = 10
+        static let animationInfoStackSpacing: CGFloat = 8
+        static let timecodeInitial = "0:00"
+        static let minutesDivider = 60
+        static let timerInterval: TimeInterval = 0.1
+    }
 
-    private var currentAnimationIndex = 0 // в Constants
+    private var currentAnimationIndex = Constants.initialAnimationIndex
     private var animationTimer: Timer?
 
     private let animationView: LottieAnimationView = {
@@ -21,47 +39,47 @@ final class AnimationsViewController: UIViewController {
         var config = UIButton.Configuration.plain()
         config.image = UIImage(systemName: systemName)
         config.preferredSymbolConfigurationForImage = UIImage.SymbolConfiguration(pointSize: pointSize, weight: .bold)
-        config.contentInsets = NSDirectionalEdgeInsets(top: 4, leading: 4, bottom: 4, trailing: 4) // в Constants весь NSDirectionalEdgeInsets
+        config.contentInsets = Constants.buttonInsets
         
         let button = UIButton(configuration: config)
         button.tintColor = .gray
         button.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
-            button.widthAnchor.constraint(equalToConstant: 60), // в Constants
-            button.heightAnchor.constraint(equalToConstant: 60) // в Constants
+            button.widthAnchor.constraint(equalToConstant: Constants.buttonDimension),
+            button.heightAnchor.constraint(equalToConstant: Constants.buttonDimension)
         ])
         
         return button
     }
 
     private lazy var playPauseButton: UIButton = {
-        let button = createConfiguredButton("play.fill", 40) // в Constants string
+        let button = createConfiguredButton("play.fill", Constants.playPausePointSize)
         button.addTarget(self, action: #selector(togglePlayPause), for: .touchUpInside)
         return button
     }()
     
     private lazy var previousButton: UIButton = {
-        let button = createConfiguredButton("backward.fill", 30) // в Constants string
+        let button = createConfiguredButton("backward.fill", Constants.controlButtonPointSize)
         button.addTarget(self, action: #selector(showPreviousAnimation), for: .touchUpInside)
         return button
     }()
     
     private lazy var nextButton: UIButton = {
-        let button = createConfiguredButton("forward.fill", 30) // в Constants string
+        let button = createConfiguredButton("forward.fill", Constants.controlButtonPointSize)
         button.addTarget(self, action: #selector(showNextAnimation), for: .touchUpInside)
         return button
     }()
     
     private lazy var speedSlider: UISlider = {
         let slider = UISlider()
-        slider.minimumValue = 0.5 // в Constants
-        slider.maximumValue = 2.0 // в Constants
-        slider.value = 1.0 // в Constants
+        slider.minimumValue = Constants.sliderMinValue
+        slider.maximumValue = Constants.sliderMaxValue
+        slider.value = Constants.sliderInitialValue
         slider.addTarget(self, action: #selector(speedSliderChanged), for: .valueChanged)
         return slider
     }()
-    
+
     private lazy var stackView: UIStackView = {
         let stack = UIStackView(arrangedSubviews: [animationView, controlsContainer])
         stack.axis = .vertical
@@ -72,14 +90,14 @@ final class AnimationsViewController: UIViewController {
     private lazy var animationInfoStack: UIStackView = {
         let stack = UIStackView(arrangedSubviews: [timecodeLabel, animationNameLabel])
         stack.axis = .vertical
-        stack.spacing = 8 // в Constants
+        stack.spacing = Constants.animationInfoStackSpacing
         return stack
     }()
 
     private lazy var controlsButtonStack: UIStackView = {
         let stack = UIStackView(arrangedSubviews: [previousButton, playPauseButton, nextButton])
         stack.axis = .horizontal
-        stack.spacing = 5 // в Constants
+        stack.spacing = Constants.controlButtonStackSpacing
         stack.distribution = .equalSpacing
         return stack
     }()
@@ -87,7 +105,7 @@ final class AnimationsViewController: UIViewController {
     private lazy var controlsContainerStack: UIStackView = {
         let stack = UIStackView(arrangedSubviews: [controlsButtonStack])
         stack.axis = .vertical
-        stack.spacing = 10 // в Constants
+        stack.spacing = Constants.controlsContainerStackSpacing
         stack.alignment = .center
         return stack
     }()
@@ -103,7 +121,7 @@ final class AnimationsViewController: UIViewController {
         
         let stack = UIStackView(arrangedSubviews: [slowIcon, speedSlider, fastIcon])
         stack.axis = .horizontal
-        stack.spacing = 8 // в Constants
+        stack.spacing = Constants.horizontalStackSpacing
         
         return stack
     }()
@@ -111,7 +129,7 @@ final class AnimationsViewController: UIViewController {
     private lazy var verticalStack: UIStackView = {
         let stack = UIStackView(arrangedSubviews: [animationInfoStack, controlsContainerStack, speedControlStack])
         stack.axis = .vertical
-        stack.spacing = 65 // в Constants
+        stack.spacing = Constants.verticalStackSpacing
         stack.translatesAutoresizingMaskIntoConstraints = false
         return stack
     }()
@@ -124,7 +142,7 @@ final class AnimationsViewController: UIViewController {
         NSLayoutConstraint.activate([
             verticalStack.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             verticalStack.topAnchor.constraint(equalTo: view.topAnchor),
-            controlsButtonStack.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 0.5), // в Constants
+            controlsButtonStack.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 0.5),
             speedSlider.widthAnchor.constraint(equalTo: speedControlStack.widthAnchor, multiplier: 0.8)
         ])
         
@@ -163,21 +181,20 @@ final class AnimationsViewController: UIViewController {
             stackView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             stackView.topAnchor.constraint(equalTo: view.topAnchor),
             stackView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-            
             animationView.heightAnchor.constraint(equalTo: stackView.heightAnchor, multiplier: 0.6),
-            controlsContainer.heightAnchor.constraint(equalTo: stackView.heightAnchor, multiplier: 0.4) // в Constants
+            controlsContainer.heightAnchor.constraint(equalTo: stackView.heightAnchor, multiplier: 0.4)
         ])
     }
 
     private func loadAnimation(at index: Int, autoPlay: Bool) {
-        let animationName = animationNames[index]
+        let animationName = Constants.animationNames[index]
         animationView.animation = LottieAnimation.named(animationName)
         animationNameLabel.text = animationName
-        timecodeLabel.text = "0:00" // в Constants
+        timecodeLabel.text = Constants.timecodeInitial
         
         animationTimer?.invalidate()
         
-        if autoPlay { // упростить эту хуйню прогони через гпт
+        if autoPlay {
             startTimer()
             animationView.play()
             playPauseButton.configuration?.image = UIImage(named: "pause")
@@ -188,7 +205,7 @@ final class AnimationsViewController: UIViewController {
     }
 
     private func startTimer() {
-        animationTimer = Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true) { [weak self] _ in
+        animationTimer = Timer.scheduledTimer(withTimeInterval: Constants.timerInterval, repeats: true) { [weak self] _ in
             guard let self = self, let animation = self.animationView.animation else { return }
             let duration = animation.duration
             let currentTime = Double(self.animationView.currentProgress) * duration
@@ -197,8 +214,8 @@ final class AnimationsViewController: UIViewController {
     }
 
     private func formatTime(_ time: Double) -> String {
-        let minutes = Int(time) / 60 // в Constants
-        let seconds = Int(time) % 60 // в Constants
+        let minutes = Int(time) / Constants.minutesDivider
+        let seconds = Int(time) % Constants.minutesDivider
         return String(format: "%d:%02d", minutes, seconds)
     }
 
@@ -215,20 +232,16 @@ final class AnimationsViewController: UIViewController {
     }
 
     @objc private func showPreviousAnimation() {
-        currentAnimationIndex = (currentAnimationIndex - 1 + animationNames.count) % animationNames.count
+        currentAnimationIndex = (currentAnimationIndex - 1 + Constants.animationNames.count) % Constants.animationNames.count
         loadAnimation(at: currentAnimationIndex, autoPlay: animationView.isAnimationPlaying)
     }
 
     @objc private func showNextAnimation() {
-        currentAnimationIndex = (currentAnimationIndex + 1) % animationNames.count
+        currentAnimationIndex = (currentAnimationIndex + 1) % Constants.animationNames.count
         loadAnimation(at: currentAnimationIndex, autoPlay: animationView.isAnimationPlaying)
     }
 
     @objc private func speedSliderChanged() {
         animationView.animationSpeed = CGFloat(speedSlider.value)
-    }
-    
-    struct Constants {
-        static let example: CGFloat = 15 // пример выноса
     }
 }
