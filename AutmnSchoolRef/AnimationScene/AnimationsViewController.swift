@@ -93,11 +93,11 @@ final class AnimationsViewController: UIViewController {
     }()
     
     private lazy var speedControlStack: UIStackView = {
-        let slowIcon = UIImageView(image: UIImage(systemName: "tortoise.fill")) // UIImage вынести в экстеншен класса UIImage статическими переменными аналогично с Colors и Fonts
+        let slowIcon = UIImageView(image: UIImage(named: "slow"))
         slowIcon.tintColor = .gray
         slowIcon.contentMode = .scaleAspectFit
         
-        let fastIcon = UIImageView(image: UIImage(systemName: "hare.fill")) // UIImage вынести в экстеншен класса UIImage статическими переменными аналогично с Colors и Fonts
+        let fastIcon = UIImageView(image: UIImage(named: "fast"))
         fastIcon.tintColor = .gray
         fastIcon.contentMode = .scaleAspectFit
         
@@ -180,10 +180,10 @@ final class AnimationsViewController: UIViewController {
         if autoPlay { // упростить эту хуйню прогони через гпт
             startTimer()
             animationView.play()
-            playPauseButton.configuration?.image = UIImage(systemName: "pause.fill") // в экст UIImage
+            playPauseButton.configuration?.image = UIImage(named: "pause")
         } else {
             animationView.stop()
-            playPauseButton.configuration?.image = UIImage(systemName: "play.fill")
+            playPauseButton.configuration?.image = UIImage(named: "play")
         }
     }
 
@@ -206,11 +206,11 @@ final class AnimationsViewController: UIViewController {
         if animationView.isAnimationPlaying {
             animationView.pause()
             animationTimer?.invalidate()
-            playPauseButton.configuration?.image = UIImage(systemName: "play.fill") // в экст UIImage
+            playPauseButton.configuration?.image = UIImage(named: "play")
         } else {
             animationView.play()
             startTimer()
-            playPauseButton.configuration?.image = UIImage(systemName: "pause.fill") // в экст UIImage
+            playPauseButton.configuration?.image = UIImage(named: "pause")
         }
     }
 
