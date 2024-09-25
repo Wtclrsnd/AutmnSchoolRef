@@ -27,7 +27,7 @@ final class AnimationsViewController: UIViewController {
         let view = LottieAnimationView()
         view.contentMode = .scaleAspectFit
         view.loopMode = .loop
-        view.backgroundColor = .lightGray
+        view.backgroundColor = .styleruLightGray
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
@@ -39,7 +39,7 @@ final class AnimationsViewController: UIViewController {
         config.contentInsets = Constants.buttonInsets
         
         let button = UIButton(configuration: config)
-        button.tintColor = .gray
+        button.tintColor = .styleruGray
         button.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
@@ -109,11 +109,11 @@ final class AnimationsViewController: UIViewController {
     
     private lazy var speedControlStack: UIStackView = {
         let slowIcon = UIImageView(image: UIImage(named: "slow"))
-        slowIcon.tintColor = .gray
+        slowIcon.tintColor = .styleruGray
         slowIcon.contentMode = .scaleAspectFit
         
         let fastIcon = UIImageView(image: UIImage(named: "fast"))
-        fastIcon.tintColor = .gray
+        fastIcon.tintColor = .styleruGray
         fastIcon.contentMode = .scaleAspectFit
         
         let stack = UIStackView(arrangedSubviews: [slowIcon, speedSlider, fastIcon])
@@ -149,7 +149,7 @@ final class AnimationsViewController: UIViewController {
     private let timecodeLabel: UILabel = {
         let label = UILabel()
         label.font = .styleruBold
-        label.textColor = .black
+        label.textColor = .styleruSubtitle
         label.textAlignment = .center
         return label
     }()
@@ -157,7 +157,7 @@ final class AnimationsViewController: UIViewController {
     private let animationNameLabel: UILabel = {
         let label = UILabel()
         label.font = .styleruSemibold
-        label.textColor = .gray
+        label.textColor = .styleruGray
         label.textAlignment = .center
         return label
     }()
