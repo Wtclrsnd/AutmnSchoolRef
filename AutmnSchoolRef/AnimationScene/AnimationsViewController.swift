@@ -19,12 +19,9 @@ final class AnimationsViewController: UIViewController {
         static let controlsContainerStackSpacing: CGFloat = 10
         static let animationInfoStackSpacing: CGFloat = 8
         static let timecodeInitial = "0:00"
-        static let minutesDivider = 60
-        static let timerInterval: TimeInterval = 0.1
     }
 
     private var currentAnimationIndex = Constants.initialAnimationIndex
-    private var animationTimer: Timer?
 
     private let animationView: LottieAnimationView = {
         let view = LottieAnimationView()
@@ -54,19 +51,19 @@ final class AnimationsViewController: UIViewController {
     }
 
     private lazy var playPauseButton: UIButton = {
-        let button = createConfiguredButton("play.fill", Constants.playPausePointSize)
+        let button = createConfiguredButton("play", Constants.playPausePointSize)
         button.addTarget(self, action: #selector(togglePlayPause), for: .touchUpInside)
         return button
     }()
     
     private lazy var previousButton: UIButton = {
-        let button = createConfiguredButton("backward.fill", Constants.controlButtonPointSize)
+        let button = createConfiguredButton("backward", Constants.controlButtonPointSize)
         button.addTarget(self, action: #selector(showPreviousAnimation), for: .touchUpInside)
         return button
     }()
     
     private lazy var nextButton: UIButton = {
-        let button = createConfiguredButton("forward.fill", Constants.controlButtonPointSize)
+        let button = createConfiguredButton("forward", Constants.controlButtonPointSize)
         button.addTarget(self, action: #selector(showNextAnimation), for: .touchUpInside)
         return button
     }()
@@ -191,11 +188,8 @@ final class AnimationsViewController: UIViewController {
         animationView.animation = LottieAnimation.named(animationName)
         animationNameLabel.text = animationName
         timecodeLabel.text = Constants.timecodeInitial
-
-        animationTimer?.invalidate()
         
         if autoPlay {
-            startTimer()
             animationView.play()
         } else {
             animationView.stop()
@@ -205,29 +199,12 @@ final class AnimationsViewController: UIViewController {
         playPauseButton.configuration?.image = UIImage(named: imageName)
     }
 
-    private func startTimer() {
-        animationTimer = Timer.scheduledTimer(withTimeInterval: Constants.timerInterval, repeats: true) { [weak self] _ in
-            guard let self = self, let animation = self.animationView.animation else { return }
-            let duration = animation.duration
-            let currentTime = Double(self.animationView.currentProgress) * duration
-            self.timecodeLabel.text = self.formatTime(currentTime)
-        }
-    }
-
-    private func formatTime(_ time: Double) -> String {
-        let minutes = Int(time) / Constants.minutesDivider
-        let seconds = Int(time) % Constants.minutesDivider
-        return String(format: "%d:%02d", minutes, seconds)
-    }
-
     @objc private func togglePlayPause() {
         if animationView.isAnimationPlaying {
             animationView.pause()
-            animationTimer?.invalidate()
             playPauseButton.configuration?.image = UIImage(named: "play")
         } else {
             animationView.play()
-            startTimer()
             playPauseButton.configuration?.image = UIImage(named: "pause")
         }
     }
