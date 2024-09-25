@@ -1,17 +1,33 @@
 import UIKit
 import Lottie
 
-class AnimationsViewController: UIViewController {
+final class AnimationsViewController: UIViewController {
 
-    private let animationNames = ["animation1", "animation2", "animation3"]
-    private var currentAnimationIndex = 0
-    private var animationTimer: Timer?
+    private struct Constants {
+        static let animationNames = ["animation1", "animation2", "animation3"]
+        static let initialAnimationIndex = 0
+        static let buttonDimension: CGFloat = 60
+        static let buttonInsets = NSDirectionalEdgeInsets(top: 4, leading: 4, bottom: 4, trailing: 4)
+        static let playPausePointSize: CGFloat = 40
+        static let controlButtonPointSize: CGFloat = 30
+        static let sliderMinValue: Float = 0.5
+        static let sliderMaxValue: Float = 2.0
+        static let sliderInitialValue: Float = 1.0
+        static let horizontalStackSpacing: CGFloat = 8
+        static let verticalStackSpacing: CGFloat = 65
+        static let controlButtonStackSpacing: CGFloat = 5
+        static let controlsContainerStackSpacing: CGFloat = 10
+        static let animationInfoStackSpacing: CGFloat = 8
+        static let timecodeInitial = "0:00"
+    }
+
+    private var currentAnimationIndex = Constants.initialAnimationIndex
 
     private let animationView: LottieAnimationView = {
         let view = LottieAnimationView()
         view.contentMode = .scaleAspectFit
         view.loopMode = .loop
-        view.backgroundColor = .lightGray
+        view.backgroundColor = .styleruLightGray
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
@@ -20,47 +36,47 @@ class AnimationsViewController: UIViewController {
         var config = UIButton.Configuration.plain()
         config.image = UIImage(systemName: systemName)
         config.preferredSymbolConfigurationForImage = UIImage.SymbolConfiguration(pointSize: pointSize, weight: .bold)
-        config.contentInsets = NSDirectionalEdgeInsets(top: 4, leading: 4, bottom: 4, trailing: 4)
+        config.contentInsets = Constants.buttonInsets
         
         let button = UIButton(configuration: config)
-        button.tintColor = .gray
+        button.tintColor = .styleruGray
         button.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
-            button.widthAnchor.constraint(equalToConstant: 60),
-            button.heightAnchor.constraint(equalToConstant: 60)
+            button.widthAnchor.constraint(equalToConstant: Constants.buttonDimension),
+            button.heightAnchor.constraint(equalToConstant: Constants.buttonDimension)
         ])
         
         return button
     }
 
     private lazy var playPauseButton: UIButton = {
-        let button = createConfiguredButton("play.fill", 40)
+        let button = createConfiguredButton("play", Constants.playPausePointSize)
         button.addTarget(self, action: #selector(togglePlayPause), for: .touchUpInside)
         return button
     }()
     
     private lazy var previousButton: UIButton = {
-        let button = createConfiguredButton("backward.fill", 30)
+        let button = createConfiguredButton("backward", Constants.controlButtonPointSize)
         button.addTarget(self, action: #selector(showPreviousAnimation), for: .touchUpInside)
         return button
     }()
     
     private lazy var nextButton: UIButton = {
-        let button = createConfiguredButton("forward.fill", 30)
+        let button = createConfiguredButton("forward", Constants.controlButtonPointSize)
         button.addTarget(self, action: #selector(showNextAnimation), for: .touchUpInside)
         return button
     }()
     
-    private let speedSlider: UISlider = {
+    private lazy var speedSlider: UISlider = {
         let slider = UISlider()
-        slider.minimumValue = 0.5
-        slider.maximumValue = 2.0
-        slider.value = 1.0
+        slider.minimumValue = Constants.sliderMinValue
+        slider.maximumValue = Constants.sliderMaxValue
+        slider.value = Constants.sliderInitialValue
         slider.addTarget(self, action: #selector(speedSliderChanged), for: .valueChanged)
         return slider
     }()
-    
+
     private lazy var stackView: UIStackView = {
         let stack = UIStackView(arrangedSubviews: [animationView, controlsContainer])
         stack.axis = .vertical
@@ -71,14 +87,14 @@ class AnimationsViewController: UIViewController {
     private lazy var animationInfoStack: UIStackView = {
         let stack = UIStackView(arrangedSubviews: [timecodeLabel, animationNameLabel])
         stack.axis = .vertical
-        stack.spacing = 8
+        stack.spacing = Constants.animationInfoStackSpacing
         return stack
     }()
 
     private lazy var controlsButtonStack: UIStackView = {
         let stack = UIStackView(arrangedSubviews: [previousButton, playPauseButton, nextButton])
         stack.axis = .horizontal
-        stack.spacing = 5
+        stack.spacing = Constants.controlButtonStackSpacing
         stack.distribution = .equalSpacing
         return stack
     }()
@@ -86,23 +102,23 @@ class AnimationsViewController: UIViewController {
     private lazy var controlsContainerStack: UIStackView = {
         let stack = UIStackView(arrangedSubviews: [controlsButtonStack])
         stack.axis = .vertical
-        stack.spacing = 10
+        stack.spacing = Constants.controlsContainerStackSpacing
         stack.alignment = .center
         return stack
     }()
     
     private lazy var speedControlStack: UIStackView = {
-        let slowIcon = UIImageView(image: UIImage(systemName: "tortoise.fill"))
-        slowIcon.tintColor = .gray
+        let slowIcon = UIImageView(image: UIImage(named: "slow"))
+        slowIcon.tintColor = .styleruGray
         slowIcon.contentMode = .scaleAspectFit
         
-        let fastIcon = UIImageView(image: UIImage(systemName: "hare.fill"))
-        fastIcon.tintColor = .gray
+        let fastIcon = UIImageView(image: UIImage(named: "fast"))
+        fastIcon.tintColor = .styleruGray
         fastIcon.contentMode = .scaleAspectFit
         
         let stack = UIStackView(arrangedSubviews: [slowIcon, speedSlider, fastIcon])
         stack.axis = .horizontal
-        stack.spacing = 8
+        stack.spacing = Constants.horizontalStackSpacing
         
         return stack
     }()
@@ -110,7 +126,7 @@ class AnimationsViewController: UIViewController {
     private lazy var verticalStack: UIStackView = {
         let stack = UIStackView(arrangedSubviews: [animationInfoStack, controlsContainerStack, speedControlStack])
         stack.axis = .vertical
-        stack.spacing = 65
+        stack.spacing = Constants.verticalStackSpacing
         stack.translatesAutoresizingMaskIntoConstraints = false
         return stack
     }()
@@ -133,7 +149,7 @@ class AnimationsViewController: UIViewController {
     private let timecodeLabel: UILabel = {
         let label = UILabel()
         label.font = .styleruBold
-        label.textColor = .black
+        label.textColor = .styleruSubtitle
         label.textAlignment = .center
         return label
     }()
@@ -141,7 +157,7 @@ class AnimationsViewController: UIViewController {
     private let animationNameLabel: UILabel = {
         let label = UILabel()
         label.font = .styleruSemibold
-        label.textColor = .gray
+        label.textColor = .styleruGray
         label.textAlignment = .center
         return label
     }()
@@ -162,64 +178,44 @@ class AnimationsViewController: UIViewController {
             stackView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             stackView.topAnchor.constraint(equalTo: view.topAnchor),
             stackView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-            
             animationView.heightAnchor.constraint(equalTo: stackView.heightAnchor, multiplier: 0.6),
             controlsContainer.heightAnchor.constraint(equalTo: stackView.heightAnchor, multiplier: 0.4)
         ])
     }
 
     private func loadAnimation(at index: Int, autoPlay: Bool) {
-        let animationName = animationNames[index]
+        let animationName = Constants.animationNames[index]
         animationView.animation = LottieAnimation.named(animationName)
         animationNameLabel.text = animationName
-        timecodeLabel.text = "0:00"
-        
-        animationTimer?.invalidate()
+        timecodeLabel.text = Constants.timecodeInitial
         
         if autoPlay {
-            startTimer()
             animationView.play()
-            playPauseButton.configuration?.image = UIImage(systemName: "pause.fill")
         } else {
             animationView.stop()
-            playPauseButton.configuration?.image = UIImage(systemName: "play.fill")
         }
-    }
 
-    private func startTimer() {
-        animationTimer = Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true) { [weak self] _ in
-            guard let self = self, let animation = self.animationView.animation else { return }
-            let duration = animation.duration
-            let currentTime = Double(self.animationView.currentProgress) * duration
-            self.timecodeLabel.text = self.formatTime(currentTime)
-        }
-    }
-
-    private func formatTime(_ time: Double) -> String {
-        let minutes = Int(time) / 60
-        let seconds = Int(time) % 60
-        return String(format: "%d:%02d", minutes, seconds)
+        let imageName = autoPlay ? "pause" : "play"
+        playPauseButton.configuration?.image = UIImage(named: imageName)
     }
 
     @objc private func togglePlayPause() {
         if animationView.isAnimationPlaying {
             animationView.pause()
-            animationTimer?.invalidate()
-            playPauseButton.configuration?.image = UIImage(systemName: "play.fill")
+            playPauseButton.configuration?.image = UIImage(named: "play")
         } else {
             animationView.play()
-            startTimer()
-            playPauseButton.configuration?.image = UIImage(systemName: "pause.fill")
+            playPauseButton.configuration?.image = UIImage(named: "pause")
         }
     }
 
     @objc private func showPreviousAnimation() {
-        currentAnimationIndex = (currentAnimationIndex - 1 + animationNames.count) % animationNames.count
+        currentAnimationIndex = (currentAnimationIndex - 1 + Constants.animationNames.count) % Constants.animationNames.count
         loadAnimation(at: currentAnimationIndex, autoPlay: animationView.isAnimationPlaying)
     }
 
     @objc private func showNextAnimation() {
-        currentAnimationIndex = (currentAnimationIndex + 1) % animationNames.count
+        currentAnimationIndex = (currentAnimationIndex + 1) % Constants.animationNames.count
         loadAnimation(at: currentAnimationIndex, autoPlay: animationView.isAnimationPlaying)
     }
 
