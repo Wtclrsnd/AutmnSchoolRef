@@ -112,7 +112,6 @@
 		723F4C8E2C4BDA5000F400FC /* CollectionViewScenes */ = {
 			isa = PBXGroup;
 			children = (
-				72690E532C8DAE9E0082E9D0 /* CollectionView */,
 				729961312C6914FC00917EA9 /* ListCollectionViewController.swift */,
 				72690E512C8DABF00082E9D0 /* IconsService.swift */,
 			);
@@ -135,13 +134,6 @@
 				7299612F2C6914E200917EA9 /* AnimationsViewController.swift */,
 			);
 			path = AnimationScene;
-			sourceTree = "<group>";
-		};
-		72690E532C8DAE9E0082E9D0 /* CollectionView */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = CollectionView;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

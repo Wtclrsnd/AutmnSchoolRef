@@ -7,9 +7,11 @@
 
 import UIKit
 
-class EnterViewController: UIViewController {
+final class EnterViewController: UIViewController {
     
-    // MARK: - UI Components
+    private let leadingInset: CGFloat = 20
+    
+    // MARK: - ELEMENTS
     private lazy var titleLabel: UILabel = {
         let label = UILabel()
         label.text = "Зарегистрируйтесь\n в приложении, чтобы\n получить доступ к данным"
@@ -19,7 +21,15 @@ class EnterViewController: UIViewController {
         return label
     }()
     
-    private lazy var loginTextField: UITextField = {
+    private lazy var mainStackView: UIStackView = {
+        let stackView = UIStackView()
+        stackView.spacing = 20
+        stackView.customSpacing(after: passwordTextField)
+        stackView.axis = .vertical
+        return stackView
+    }()
+    
+    private lazy var loginTextField: UITextField = { //mainStackView
         let textField = UITextField()
         textField.placeholder = "Логин"
         textField.borderStyle = .roundedRect
@@ -29,59 +39,59 @@ class EnterViewController: UIViewController {
         textField.backgroundColor = .styleruLightGray
         textField.layer.borderColor = UIColor.styleruBorderGray.cgColor
         
-        textField.layer.cornerRadius = 15 // выносим в структ Constants
+        textField.layer.cornerRadius = Constants.cornerRadiusTextField // выносим в структ Constants
         
         textField.font = .styleruRegular
         
         return textField
     }()
     
-    private lazy var passwordTextField: UITextField = {
+    private lazy var passwordTextField: UITextField = { //mainStackView
         let textField = UITextField()
         textField.placeholder = "Пароль"
         textField.borderStyle = .roundedRect
         textField.isSecureTextEntry = true
         
         textField.backgroundColor = .styleruLightGray
-        textField.layer.cornerRadius = 15 // выносим в структ Constants
+        textField.layer.cornerRadius = Constants.cornerRadiusTextField // выносим в структ Constants
         
         return textField
     }()
     
-    private lazy var loginButton: UIButton = {
+    private lazy var loginButton: UIButton = { //mainStackView
         let button = UIButton()
         button.setTitle("Зарегистрироваться", for: .normal)
         button.backgroundColor = .systemGray
         button.setTitleColor(.white, for: .normal)
-        button.layer.cornerRadius = 10 // выносим в структ Constants
-        button.addTarget(self, action: #selector(handleLoginButtonTap), for: .touchUpInside)
+        button.layer.cornerRadius = Constants.cornerRadiusButton // выносим в структ Constants
+        button.addTarget(self, action: #selector(passwordCheck), for: .touchUpInside)
         
         return button
     }()
     
-    // MARK: -
+    // MARK: - SETUP
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        view.backgroundColor = .white
         setupLayout()
         addObservers()
     }
     
-    // MARK: - UI Setup
-    
+    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
+        view.endEditing(true)
+    }
+
     func setupLayout() {
-        view.backgroundColor = .white
+        setupTitle()
+        setupMainStackView()
         
         // РАЗБИТЬ все по функам
         // Отступы в Constants
         // Переверстать все на UIStackView
         
-        view.addSubview(titleLabel)
-        titleLabel.translatesAutoresizingMaskIntoConstraints = false
-        titleLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        titleLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 70).isActive = true
-        titleLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20).isActive = true
         
+        /*
         view.addSubview(loginTextField)
         loginTextField.translatesAutoresizingMaskIntoConstraints = false
         loginTextField.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
@@ -98,9 +108,38 @@ class EnterViewController: UIViewController {
         loginButton.translatesAutoresizingMaskIntoConstraints = false
         loginButton.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
         loginButton.topAnchor.constraint(equalTo: passwordTextField.bottomAnchor, constant: 40).isActive = true
+        loginButton.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 3/5).isActive = true*/
+    }
+    
+    private func setupTitle() {
+        view.addSubview(titleLabel)
+        titleLabel.translatesAutoresizingMaskIntoConstraints = false
+        
+        titleLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        titleLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 70).isActive = true
+        titleLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: leadingInset).isActive = true
+    }
+    
+    private func setupLoginButton() {
         loginButton.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 3/5).isActive = true
     }
     
+    private func setupMainStackView() {
+        view.addSubview(mainStackView)
+        mainStackView.translatesAutoresizingMaskIntoConstraints = false
+        mainStackView.addArrangedSubview(loginTextField)
+        mainStackView.addArrangedSubview(passwordTextField)
+        
+        mainStackView.setCustomSpacing(40, after: passwordTextField)
+    
+        mainStackView.addArrangedSubview(loginButton)
+        //setupLoginButton()
+        
+        mainStackView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        mainStackView.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 40).isActive = true
+        
+        mainStackView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: leadingInset).isActive = true
+    }
     // MARK: - Observers
     
     func addObservers() {
@@ -108,7 +147,7 @@ class EnterViewController: UIViewController {
     }
     
     // MARK: - Actions
-    @objc func handleLoginButtonTap() {
+    @objc func passwordCheck() {
         
         // Проверки в отдельный функ с аргументом
         guard let login = loginTextField.text, let password = passwordTextField.text else {
@@ -126,6 +165,10 @@ class EnterViewController: UIViewController {
             return
         }
         
+        dismiss(animated: true)
+        
+        let AnimationVC = EnterViewController()
+        self.navigationController?.pushViewController(AnimationVC, animated: true)
         // проверка с REGEX в отдельном функе
         
         dismiss(animated: true)
@@ -144,6 +187,8 @@ class EnterViewController: UIViewController {
     }
     
     struct Constants {
-        static let cornerRadius: CGFloat = 15 // пример переменной
+        static let cornerRadiusTextField: CGFloat = 15
+        static let cornerRadiusButton: CGFloat = 10
+        static let customSpacing: CGFloat = 40
     }
 }
