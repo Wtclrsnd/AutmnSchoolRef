@@ -64,7 +64,7 @@ final class EnterViewController: UIViewController {
         button.backgroundColor = .systemGray
         button.setTitleColor(.white, for: .normal)
         button.layer.cornerRadius = Constants.cornerRadiusButton // выносим в структ Constants
-        button.addTarget(self, action: #selector(passwordCheck), for: .touchUpInside)
+        button.addTarget(self, action: #selector(moveToNextScene), for: .touchUpInside)
         
         return button
     }()
@@ -85,30 +85,6 @@ final class EnterViewController: UIViewController {
     func setupLayout() {
         setupTitle()
         setupMainStackView()
-        
-        // РАЗБИТЬ все по функам
-        // Отступы в Constants
-        // Переверстать все на UIStackView
-        
-        
-        /*
-        view.addSubview(loginTextField)
-        loginTextField.translatesAutoresizingMaskIntoConstraints = false
-        loginTextField.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        loginTextField.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 40).isActive = true
-        loginTextField.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20).isActive = true
-        
-        view.addSubview(passwordTextField)
-        passwordTextField.translatesAutoresizingMaskIntoConstraints = false
-        passwordTextField.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        passwordTextField.topAnchor.constraint(equalTo: loginTextField.bottomAnchor, constant: 20).isActive = true
-        passwordTextField.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20).isActive = true
-        
-        view.addSubview(loginButton)
-        loginButton.translatesAutoresizingMaskIntoConstraints = false
-        loginButton.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        loginButton.topAnchor.constraint(equalTo: passwordTextField.bottomAnchor, constant: 40).isActive = true
-        loginButton.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 3/5).isActive = true*/
     }
     
     private func setupTitle() {
@@ -147,31 +123,43 @@ final class EnterViewController: UIViewController {
     }
     
     // MARK: - Actions
-    @objc func passwordCheck() {
+    func passwordIsValid(password: String) -> Bool {
+        let pattern = "^(?=.+[A-Z])(?=.+[0-9])(?=.+[.,?!():;]).{8,}$"
         
-        // Проверки в отдельный функ с аргументом
+        guard password.range(of: pattern, options: .regularExpression) != nil else {
+            return false
+        }
+        return true
+    }
+    
+    func textFieldsCheck() -> Bool {
         guard let login = loginTextField.text, let password = passwordTextField.text else {
             print("Please fill in both login and password fields")
-            return
+            return false
         }
         
         if login.isEmpty || password.isEmpty {
             print("Please fill in both login and password fields")
-            return
+            return false
         }
         
-        if password.count < 8 {
-            print("Password should be at least 8 characters long")
-            return
+        if passwordIsValid(password: password) {
+            print("password correct")
+            return true
         }
         
         dismiss(animated: true)
         
-        let AnimationVC = EnterViewController()
-        self.navigationController?.pushViewController(AnimationVC, animated: true)
-        // проверка с REGEX в отдельном функе
-        
-        dismiss(animated: true)
+        print("Password incorrect")
+        return false
+    }
+    
+    @objc func moveToNextScene() {
+        if textFieldsCheck() {
+            let AnimationVC = EnterViewController()
+            self.navigationController?.pushViewController(AnimationVC, animated: true)
+            print("MOVE!!!!")
+        }
     }
     
     @objc func handlePasswordChange() {
